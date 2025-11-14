@@ -1,0 +1,83 @@
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <h1>Dependencias</h1>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="search-bar">
+    <input 
+      type="text" 
+      [(ngModel)]="filtro" 
+      placeholder="Buscar por nombre, dirección o correo..."
+    >
+    <button (click)="buscar()">Buscar</button>
+    <button routerLink="/dependencias/nueva">+ Nueva Dependencia</button>
+  </div>
+
+  <!-- Table -->
+  <div *ngIf="dependencias.length > 0">
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Dirección</th>
+          <th>Teléfono</th>
+          <th>Correo</th>
+          <th>Estado</th>
+          <th>Actualizado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let d of dependencias">
+          <td><strong>{{ capitalize(d.nombre) }}</strong></td>
+          <td>{{ capitalize(d.direccion) }}</td>
+          <td>{{ formatPhone(d.telefono) }}</td>
+          <td>{{ d.correo.toLowerCase() }}</td>
+          <td>
+            <span 
+              [class]="'status-badge ' + (d.activo ? 'status-active' : 'status-inactive')"
+            >
+              {{ d.activo ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+          <td>{{ d.fechaActualizacion | date:'short' }}</td>
+          <td>
+            <div class="action-buttons">
+              <button [routerLink]="['/dependencias/editar', d.id]">Editar</button>
+              <button (click)="toggleActivo(d)">
+                {{ d.activo ? 'Desactivar' : 'Activar' }}
+              </button>
+              <button (click)="eliminar(d.id!)">Eliminar</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="dependencias.length === 0" class="empty-state">
+    <p>No hay dependencias para mostrar</p>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination">
+    <button 
+      (click)="cambiarPagina(-1)"
+      [disabled]="page === 0"
+    >
+      ← Anterior
+    </button>
+    
+    <span>Página {{ page + 1 }} de {{ totalPages }}</span>
+    
+    <button 
+      (click)="cambiarPagina(1)"
+      [disabled]="page >= totalPages - 1"
+    >
+      Siguiente →
+    </button>
+  </div>
+</div>

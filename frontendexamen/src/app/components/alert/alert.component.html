@@ -1,0 +1,13 @@
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 2000;">
+  <div *ngFor="let alert of alertService.alerts"
+       class="alert alert-{{alert.type}} alert-dismissible fade show"
+       role="alert">
+
+    {{ alert.message }}
+
+    <button type="button"
+            class="btn-close"
+            (click)="alertService.removeAlert(alert)">
+    </button>
+  </div>
+</div>
